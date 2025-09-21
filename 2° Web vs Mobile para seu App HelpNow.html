@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HelpNow - Web vs Mobile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3880ff;
+            --secondary: #3dc2ff;
+            --success: #2dd36f;
+            --warning: #ffc409;
+            --danger: #eb445a;
+            --dark: #222428;
+            --light: #f4f5f8;
+            --medium: #92949c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        h2 {
+            font-size: 1.9rem;
+            margin: 30px 0 18px;
+            color: var(--primary);
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin: 24px 0 14px;
+            color: var(--secondary);
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        @media (min-width: 900px) {
+            .comparison-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .web-card {
+            border-top: 6px solid var(--secondary);
+        }
+        
+        .mobile-card {
+            border-top: 6px solid var(--primary);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        
+        .web-icon {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .mobile-icon {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .card-title {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+        
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        @media (min-width: 600px) {
+            .pros-cons {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .pros, .cons {
+            padding: 15px;
+            border-radius: 12px;
+        }
+        
+        .pros {
+            background-color: rgba(45, 211, 111, 0.1);
+            border-left: 4px solid var(--success);
+        }
+        
+        .cons {
+            background-color: rgba(235, 68, 90, 0.1);
+            border-left: 4px solid var(--danger);
+        }
+        
+        .recommendation {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            border-left: 6px solid var(--warning);
+        }
+        
+        .tech-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .tech-item {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+            text-align: center;
+        }
+        
+        .tech-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 14px 28px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        
+        .button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .button-web {
+            background: var(--secondary);
+        }
+        
+        .button-mobile {
+            background: var(--primary);
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: var(--medium);
+        }
+        
+        .decision-guide {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        }
+        
+        .question {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .answer {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>HelpNow - Web vs Mobile</h1>
+            <p>Decidindo a melhor abordagem para seu aplicativo de solidariedade</p>
+        </header>
+        
+        <div class="comparison-grid">
+            <div class="card web-card">
+                <div class="card-header">
+                    <div class="icon-wrapper web-icon">
+                        <i class="fas fa-globe fa-2x"></i>
+                    </div>
+                    <h2 class="card-title">React (Web)</h2>
+                </div>
+                <p>Desenvolvimento de aplicações web responsivas que funcionam em qualquer dispositivo com navegador.</p>
+                
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h3><i class="fas fa-plus-circle"></i> Vantagens</h3>
+                        <ul>
+                            <li>Acessível em qualquer dispositivo com navegador</li>
+                            <li>Mais fácil de desenvolver e manter</li>
+                            <li>Distribuição simplificada (apenas um link)</li>
+                            <li>Melhor para SEO e descoberta</li>
+                            <li>Atualizações instantâneas</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h3><i class="fas fa-minus-circle"></i> Desvantagens</h3>
+                        <ul>
+                            <li>Performance inferior em comparação com apps nativos</li>
+                            <li>Acesso limitado a recursos do dispositivo</li>
+                            <li>Experiência menos "app-like"</li>
+                            <li>Depende de conexão com internet (para PWAs)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>Tecnologias Recomendadas para Web:</h3>
+                <div class="tech-list">
+                    <div class="tech-item">
+                        <div class="tech-icon"><i class="fab fa-react"></i></div>
+                        <h4>React</h4>
+                        <p>Biblioteca principal</p>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-icon"><i class="fas fa-road"></i></div>
+                        <h4>React Router</h4>
+                        <p>Roteamento</p>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-icon"><i class="fas fa-bolt"></i></div>
+                        <h4>Ionic React</h4>
+                        <p>Componentes UI</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mobile-card">
+                <div class="card-header">
+                    <div class="icon-wrapper mobile-icon">
+                        <i class="fas fa-mobile-alt fa-2x"></i>
+                    </div>
+                    <h2 class="card-title">React Native (Mobile)</h2>
+                </div>
+                <p>Desenvolvimento de aplicativos nativos para iOS e Android usando JavaScript e React.</p>
+                
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h3><i class="fas fa-plus-circle"></i> Vantagens</h3>
+                        <ul>
+                            <li>Performance próxima de apps nativos</li>
+                            <li>Acesso completo aos recursos do dispositivo</li>
+                            <li>Distribuição via app stores</li>
+                            <li>Experiência de usuário mais imersiva</li>
+                            <li>Funciona offline mais facilmente</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h3><i class="fas fa-minus-circle"></i> Desvantagens</h3>
+                        <ul>
+                            <li>Curva de aprendizado mais íngreme</li>
+                            <li>Desenvolvimento mais complexo</li>
+                            <li>Necessidade de publicar nas app stores</li>
+                            <li>Dificuldade com componentes nativos personalizados</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>Tecnologias Recomendadas para Mobile:</h3>
+                <div class="tech-list">
+                    <div class="tech-item">
+                        <div class="tech-icon"><i class="fab fa-react"></i></div>
+                        <h4>React Native</h4>
+                        <p>Framework principal</p>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-icon"><i class="fas fa-compass"></i></div>
+                        <h4>React Navigation</h4>
+                        <p>Navegação</p>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-icon"><i class="fas fa-mobile"></i></div>
+                        <h4>NativeBase</h4>
+                        <p>Componentes UI</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="decision-guide">
+            <h2><i class="fas fa-question-circle"></i> Como Decidir?</h2>
+            
+            <div class="question">1. Seu aplicativo precisa acessar recursos nativos como câmera, GPS ou notificações push?</div>
+            <div class="answer">
+                <strong>Sim</strong> → React Native pode ser necessário<br>
+                <strong>Não</strong> → React Web pode ser suficiente
+            </div>
+            
+            <div class="question">2. Você quer distribuir seu app através das app stores (Google Play e App Store)?</div>
+            <div class="answer">
+                <strong>Sim</strong> → React Native<br>
+                <strong>Não</strong> → React Web (acessível via navegador)
+            </div>
+            
+            <div class="question">3. Qual é seu prazo e orçamento?</div>
+            <div class="answer">
+                <strong>Curto prazo/orçamento</strong> → React Web (desenvolvimento mais rápido)<br>
+                <strong>Prazo/orçamento maiores</strong> → React Native
+            </div>
+            
+            <div class="question">4. Seu aplicativo precisa funcionar offline?</div>
+            <div class="answer">
+                <strong>Sim, extensivamente</strong> → React Native<br>
+                <strong>Funcionalidade offline básica</strong> → React Web com PWA
+            </div>
+        </div>
+        
+        <div class="recommendation">
+            <h2><i class="fas fa-lightbulb"></i> Recomendação para o HelpNow</h2>
+            <p>Considerando que seu projeto é um aplicativo de solidariedade comunitária, minha recomendação é:</p>
+            
+            <h3>Comece com React Web (PWA)</h3>
+            <p>Um Progressive Web App permite que você:</p>
+            <ul>
+                <li>Atinja mais pessoas rapidamente (apenas compartilhando um link)</li>
+                <li>Desenvolva mais rapidamente com seu conhecimento atual de React</li>
+                <li>Use funcionalidades como instalação no dispositivo, notificações push e trabalho offline</li>
+                <li>Posteriormente, você pode evoluir para React Native se necessário</li>
+            </ul>
+            
+            <p>Esta abordagem permite validar sua ideia com a comunidade antes de investir no desenvolvimento mobile nativo.</p>
+        </div>
+        
+        <div class="button-group">
+            <a href="#" class="button button-web"><i class="fas fa-code"></i> Tutorial React Web</a>
+            <a href="#" class="button button-mobile"><i class="fas fa-mobile"></i> Tutorial React Native</a>
+            <a href="#" class="button"><i class="fas fa-book"></i> Documentação</a>
+        </div>
+        
+        <footer>
+            <p>HelpNow Solidarity App Project - Desenvolvido com ❤️ para a comunidade</p>
+            <p>© 2023 - Todos os direitos reservados</p>
+        </footer>
+    </div>
+
+    <script>
+        // Adicionando interação aos botões
+        document.querySelectorAll('.button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Recurso em desenvolvimento! Em breve teremos tutoriais completos.');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HelpNow - Migração para React Native</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6200ee;
+            --primary-dark: #3700b3;
+            --secondary: #03dac6;
+            --surface: #ffffff;
+            --background: #f5f5f5;
+            --on-primary: #ffffff;
+            --on-secondary: #000000;
+            --on-surface: #000000;
+            --error: #b00020;
+            --success: #00c853;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4eaf1 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        h2 {
+            font-size: 1.9rem;
+            margin: 30px 0 18px;
+            color: var(--primary);
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin: 24px 0 14px;
+            color: var(--primary-dark);
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        @media (min-width: 900px) {
+            .content-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .steps-card {
+            border-left: 6px solid var(--primary);
+        }
+        
+        .dependencies-card {
+            border-left: 6px solid var(--secondary);
+        }
+        
+        .setup-card {
+            border-left: 6px solid var(--success);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        
+        .steps-icon {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .deps-icon {
+            background-color: var(--secondary);
+            color: black;
+        }
+        
+        .setup-icon {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .card-title {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+        
+        .step {
+            display: flex;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            background-color: var(--primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .command {
+            background-color: #1a1a1a;
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin: 12px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .note {
+            background-color: #e3f2fd;
+            padding: 16px;
+            border-left: 4px solid var(--primary);
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .warning {
+            background-color: #ffecb3;
+            padding: 16px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .dependency-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .dep-name {
+            font-weight: 600;
+        }
+        
+        .dep-command {
+            background-color: #f5f5f5;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 14px 28px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        
+        .button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #666;
+        }
+        
+        .checklist {
+            list-style-type: none;
+        }
+        
+        .checklist li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .checklist li:before {
+            content: "✓";
+            color: var(--success);
+            font-weight: bold;
+            margin-right: 10px;
+            background: #e8f5e9;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .tab {
+            display: inline-block;
+            padding: 8px 16px;
+            margin-right: 5px;
+            background: #e0e0e0;
+            border-radius: 6px 6px 0 0;
+            cursor: pointer;
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 0 8px 8px 8px;
+            margin-bottom: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>HelpNow - Migração para React Native</h1>
+            <p>Guia completo para transformar seu projeto web em um aplicativo mobile nativo</p>
+        </header>
+        
+        <div class="content-grid">
+            <div class="card steps-card">
+                <div class="card-header">
+                    <div class="icon-wrapper steps-icon">
+                        <i class="fas fa-list-ol fa-2x"></i>
+                    </div>
+                    <h2 class="card-title">Passos para Migração</h2>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Configurar Ambiente React Native</h3>
+                        <p>Instale as dependências necessárias para desenvolvimento mobile.</p>
+                        <div class="code-block">
+                            npm install -g expo-cli
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Criar Novo Projeto React Native</h3>
+                        <p>Inicie um novo projeto com a estrutura correta.</p>
+                        <div class="code-block">
+                            npx create-expo-app HelpNowMobile<br>
+                            cd HelpNowMobile
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Instalar Dependências Necessárias</h3>
+                        <p>Adicione as bibliotecas específicas para React Native.</p>
+                        <div class="code-block">
+                            npm install @react-navigation/native<br>
+                            npm install react-native-screens react-native-safe-area-context<br>
+                            npm install @react-navigation/bottom-tabs
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Migrar Código Fonte</h3>
+                        <p>Adapte seus componentes React para React Native.</p>
+                        <div class="code-block">
+                            # Substitua div por View<br>
+                            # Substitua button por TouchableOpacity<br>
+                            # Substitua input por TextInput
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Testar em Dispositivos</h3>
+                        <p>Execute o aplicativo em emuladores e dispositivos reais.</p>
+                        <div class="code-block">
+                            npx expo start
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card dependencies-card">
+                <div class="card-header">
+                    <div class="icon-wrapper deps-icon">
+                        <i class="fas fa-box-open fa-2x"></i>
+                    </div>
+                    <h2 class="card-title">Dependências Essenciais</h2>
+                </div>
+                
+                <h3>Navegação</h3>
+                <div class="dependency-item">
+                    <div class="dep-name">React Navigation</div>
+                    <div class="dep-command">npm install @react-navigation/native</div>
+                </div>
+                
+                <div class="dependency-item">
+                    <div class="dep-name">Navegação por Abas</div>
+                    <div class="dep-command">npm install @react-navigation/bottom-tabs</div>
+                </div>
+                
+                <div class="dependency-item">
+                    <div class="dep-name">Navegação em Stack</div>
+                    <div class="dep-command">npm install @react-navigation/stack</div>
+                </div>
+                
+                <h3>UI Components</h3>
+                <div class="dependency-item">
+                    <div class="dep-name">React Native Paper</div>
+                    <div class="dep-command">npm install react-native-paper</div>
+                </div>
+                
+                <div class="dependency-item">
+                    <div class="dep-name">Vector Icons</div>
+                    <div class="dep-command">npm install react-native-vector-icons</div>
+                </div>
+                
+                <h3>Funcionalidades</h3>
+                <div class="dependency-item">
+                    <div class="dep-name">Geolocalização</div>
+                    <div class="dep-command">npm install react-native-geolocation-service</div>
+                </div>
+                
+                <div class="dependency-item">
+                    <div class="dep-name">Mapas</div>
+                    <div class="dep-command">npm install react-native-maps</div>
+                </div>
+                
+                <div class="dependency-item">
+                    <div class="dep-name">Notificações</div>
+                    <div class="dep-command">npm install react-native-push-notification</div>
+                </div>
+                
+                <div class="note">
+                    <strong>Nota:</strong> Algumas dependências necessitam de configuração nativa adicional. Consulte a documentação de cada pacote.
+                </div>
+            </div>
+        </div>
+        
+        <div class="card setup-card">
+            <div class="card-header">
+                <div class="icon-wrapper setup-icon">
+                    <i class="fas fa-cogs fa-2x"></i>
+                </div>
+                <h2 class="card-title">Configuração do Ambiente</h2>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" onclick="openTab(event, 'windows-tab')">Windows</div>
+                <div class="tab" onclick="openTab(event, 'mac-tab')">macOS</div>
+                <div class="tab" onclick="openTab(event, 'linux-tab')">Linux</div>
+            </div>
+            
+            <div id="windows-tab" class="tab-content active">
+                <h3>Configuração para Windows</h3>
+                <ol>
+                    <li>Instale o Chocolatey (gerenciador de pacotes)
+                        <div class="code-block">
+                            Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+                        </div>
+                    </li>
+                    <li>Instale o Node.js e Python
+                        <div class="code-block">
+                            choco install -y nodejs-lts python2 openjdk11
+                        </div>
+                    </li>
+                    <li>Instale o Android Studio</li>
+                    <li>Configure as variáveis de ambiente ANDROID_HOME</li>
+                </ol>
+            </div>
+            
+            <div id="mac-tab" class="tab-content">
+                <h3>Configuração para macOS</h3>
+                <ol>
+                    <li>Instale o Homebrew
+                        <div class="code-block">
+                            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+                        </div>
+                    </li>
+                    <li>Instale o Node.js
+                        <div class="code-block">
+                            brew install node
+                        </div>
+                    </li>
+                    <li>Instale o Watchman
+                        <div class="code-block">
+                            brew install watchman
+                        </div>
+                    </li>
+                    <li>Instale o Xcode para compilar para iOS</li>
+                </ol>
+            </div>
+            
+            <div id="linux-tab" class="tab-content">
+                <h3>Configuração para Linux</h3>
+                <ol>
+                    <li>Instale o Node.js
+                        <div class="code-block">
+                            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -<br>
+                            sudo apt-get install -y nodejs
+                        </div>
+                    </li>
+                    <li>Instale o JDK
+                        <div class="code-block">
+                            sudo apt-get install -y openjdk-11-jdk
+                        </div>
+                    </li>
+                    <li>Instale o Android Studio</li>
+                    <li>Configure as variáveis de ambiente</li>
+                </ol>
+            </div>
+            
+            <div class="warning">
+                <strong>Atenção:</strong> A configuração do ambiente React Native pode ser complexa. Considere usar o Expo para simplificar o processo inicial.
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Checklist de Migração</h2>
+            <ul class="checklist">
+                <li>Configurar ambiente de desenvolvimento React Native</li>
+                <li>Criar novo projeto com expo ou React Native CLI</li>
+                <li>Instalar e configurar React Navigation</li>
+                <li>Substituir componentes HTML por componentes React Native</li>
+                <li>Adaptar estilos CSS para StyleSheet do React Native</li>
+                <li>Configurar permissões para recursos nativos (câmera, GPS, etc)</li>
+                <li>Testar em emulador Android</li>
+                <li>Testar em emulador iOS (se possível)</li>
+                <li>Testar em dispositivo físico</li>
+                <li>Configurar build para produção</li>
+            </ul>
+            
+            <div class="note">
+                <strong>Dica:</strong> Comece migrando uma tela por vez para facilitar o processo de debug e testes.
+            </div>
+        </div>
+        
+        <div class="button-group">
+            <a href="#" class="button"><i class="fas fa-book"></i> Documentação React Native</a>
+            <a href="#" class="button"><i class="fas fa-video"></i> Tutorial em Vídeo</a>
+        </div>
+        
+        <footer>
+            <p>HelpNow - Migração para React Native</p>
+            <p>© 2023 - Guia completo para transformar seu projeto web em aplicativo mobile</p>
+        </footer>
+    </div>
+
+    <script>
+        // Função para abrir abas
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            
+            // Esconde todos os conteúdos de aba
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            // Remove a classe active de todas as abas
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            
+            // Mostra a aba atual e adiciona a classe active
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+        
+        // Adiciona funcionalidade aos botões de copiar
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const code = this.parentNode.querySelector('code') ? 
+                    this.parentNode.querySelector('code').innerText : 
+                    this.parentNode.previousElementSibling.innerText;
+                
+                navigator.clipboard.writeText(code).then(() => {
+                    const originalText = this.textContent;
+                    this.textContent = 'Copiado!';
+                    
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
